@@ -16,7 +16,7 @@ This builds directly on **[Harrison Vanderbyl's `surface-pro-12-inch-linux`](htt
 | HW video codec | ✅ | Decode + encode via V4L2 after supplying one firmware blob (see Fixes) |
 | Audio | ✅ | Card + ADSP up, headset jack detected; topology now in linux-firmware |
 | Wi-Fi | ✅ | ath12k / WCN7850 (FastConnect 7800), wpa_supplicant |
-| Battery | ⚠️ | Charger/USB-C detection works, but capacity/percentage telemetry is not exposed (driver limitation) |
+| Battery | ✅ | Gauge works via `energy_*` / UPower (percentage + health). `charge_*`/`capacity` return ENODATA — known upstream regression, no desktop impact |
 | Suspend / resume | ❌ | Snapdragon does not resume — sleep targets masked (see Stability) |
 | Surface HID (cover / sensors) | ⚠️ | `unexpected descriptor length` warnings |
 
@@ -68,7 +68,7 @@ The AudioReach topology `X1P42100-Microsoft-Surface-Pro-12in-tplg.bin` now ships
 
 ## Known issues / TODO
 
-- **Battery telemetry incomplete** (`qcom-battmgr` on `x1p42100`): only voltage + temperature are exposed; `charge_now` / `charge_full` / capacity return `ENODATA`, so there is no charge percentage. Charger/USB-C presence *is* detected. Under investigation.
+- **Battery `charge_*` sysfs return ENODATA** and no `capacity` file — a known regression in recent qcom-x1e kernels. **No desktop impact:** UPower derives percentage and health from `energy_*` (which report correctly). `cycle_count`, `voltage_max_design` and the manufacture date are firmware placeholders. Charge-limit control and `state_of_health` are landing upstream.
 - **`panel-edp` probe warning** (`drivers/gpu/drm/panel/panel-edp.c`) — non-fatal; display works.
 - **Surface HID descriptor warnings** — cover / sensors.
 - **No suspend/resume** — masked (see below).
