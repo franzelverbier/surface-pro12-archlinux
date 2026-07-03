@@ -82,3 +82,7 @@ The AudioReach topology `X1P42100-Microsoft-Surface-Pro-12in-tplg.bin` now ships
 
 - **Harrison Vanderbyl** — [`surface-pro-12-inch-linux`](https://github.com/harrisonvanderbyl/surface-pro-12-inch-linux): the device tree + firmware groundwork this is built on.
 - Arch Linux ARM · linux-next · Mesa (freedreno / turnip) · the aarch64-laptops community.
+
+## License
+
+GPL-2.0 — see [LICENSE](LICENSE). The kernel `.config` and device tree derive from the Linux kernel (GPL-2.0); the helper scripts and documentation are released under the same license for consistency.
