@@ -14,6 +14,7 @@ All dates 2026. Kernel reference build is **`7.1.0-next-20260626`** unless noted
 - **2026-06-30** — Storage-strategy iterations (USB key → Ventoy vdisk → USB SSD); GPT-repair workflow for raw-writing a small image onto a large disk; WPA3-SAE Wi-Fi fix.
 - **~2026-07 (early)** — Moved to an **internal ext4 install**, dual-boot with Windows, for full reliability. Internal display + KDE + GPU accel working.
 - **2026-07-03** — HW video codec fixed (supplied `qcvss8380_pa.mbn`); `/dev/video0` + `/dev/video1` live. Audio confirmed working (topology now in linux-firmware). Battery telemetry identified as the main remaining issue.
+- **2026-07-14** — Re-established the HW-codec firmware after a restore had dropped it; a hot module reload (`modprobe -r qcom_iris && modprobe qcom_iris`) brings `/dev/video0` + `/dev/video1` back with no reboot. Documented a **safe full `pacman -Syu`** on this device: pin the entire Mesa/Vulkan userspace to a single version (`mesa`, `vulkan-freedreno`, `vulkan-mesa-implicit-layers`) so a partial upgrade can't skew the Adreno/turnip stack, with kernel + systemd held in `IgnorePkg`; cold boot validated. Added an `fstab` recipe to auto-mount the shared data partition with `nofail` + `x-systemd.automount` (see README → Stability notes).
 
 ## Upcoming
 

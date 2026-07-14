@@ -4,7 +4,7 @@ Running **Arch Linux ARM** on the **Microsoft Surface Pro 12" (1st Ed, Snapdrago
 
 This builds directly on **[Harrison Vanderbyl's `surface-pro-12-inch-linux`](https://github.com/harrisonvanderbyl/surface-pro-12-inch-linux)** (device tree + firmware groundwork). None of this exists without that work — thank you.
 
-> Status snapshot: **2026-07-03**. The device runs as an **internal dual-boot** (Windows + Arch Linux ARM) with working internal display, **KDE Plasma**, GPU acceleration, hardware video codec, audio, and Wi-Fi.
+> Status snapshot: **2026-07-14**. The device runs as an **internal dual-boot** (Windows + Arch Linux ARM) with working internal display, **KDE Plasma**, GPU acceleration, hardware video codec, audio, and Wi-Fi.
 
 ## Status
 
@@ -77,6 +77,8 @@ The AudioReach topology `X1P42100-Microsoft-Surface-Pro-12in-tplg.bin` now ships
 
 - **No resume from suspend** on Snapdragon → mask `sleep`/`suspend`/`hibernate`/`hybrid-sleep` targets and set logind `IdleAction=ignore`, `HandleLidSwitch=ignore`.
 - **Fragile USB controller under heavy load:** avoid sustained I/O between two USB SSDs simultaneously (locks the bus); `usbcore.autosuspend=-1` keeps USB storage from dropping (`-EIO` / ext4 corruption).
+- **Updating with `pacman -Syu`:** hold `linux-aarch64`, `systemd`, `mesa`, `vulkan-freedreno` (plus `mkinitcpio`, `linux-firmware*`) in `IgnorePkg`, and add `--ignore vulkan-mesa-implicit-layers` at upgrade time, so the whole Mesa/Vulkan userspace stays on **one** version — a partial upgrade that bumps only part of the stack can destabilise the Adreno/turnip GPU. The custom `/boot/Image` + DTB are not package-managed, so they survive upgrades untouched.
+- **Auto-mounting a shared NTFS partition** (dual-boot data): add it to `/etc/fstab` with `nofail,x-systemd.automount` through `ntfs-3g` (the custom kernel has no in-tree `ntfs3`), so a dirty/hibernated volume can never block or delay boot.
 
 ## Credits
 
